@@ -1,4 +1,5 @@
 import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -14,8 +15,8 @@ public class ArrayStorage {
     }
 
     void save(Resume resume) {
-        int index = getIndexFromUuid(resume.toString());
-        if (index < storageSize) {
+        int index = getIndex(resume.toString());
+        if (index >= 0) {
             storage[index] = resume;
         } else {
             storage[storageSize] = resume;
@@ -24,29 +25,31 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        int index = getIndexFromUuid(uuid);
-        if (index < storageSize) {
+        int index = getIndex(uuid);
+        if (index >= 0) {
             return storage[index];
         }
-        return new Resume();
+        return null;
     }
 
     void delete(String uuid) {
-        //int i;
-        for (int i = getIndexFromUuid(uuid); i < (storageSize - 1); i++) {
-            storage[i] = storage[i + 1];
-            storage[i + 1] = null;
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            for (int i = index; i < (storageSize - 1); i++) {
+                storage[i] = storage[i + 1];
+            }
+            storageSize--;
+            storage[storageSize] = null;
         }
-        storageSize--;
     }
 
-    private int getIndexFromUuid(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < storageSize; i++) {
             if (storage[i].toString().equals(uuid)) {
                 return i;
             }
         }
-        return 10000;
+        return -1;
     }
 
     /**
