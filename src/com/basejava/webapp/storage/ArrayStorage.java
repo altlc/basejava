@@ -21,7 +21,7 @@ public class ArrayStorage {
             System.out.print("Хранилище полностью заполнено");
             return;
         }
-        int index = getIndex(resume.toString());
+        int index = getIndex(resume.getUuid());
         if (index >= 0) {
             System.out.print("Резюме с таким uuid уже есть");
         } else {
@@ -31,7 +31,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int index = getIndex(resume.toString());
+        int index = getIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
         } else {
