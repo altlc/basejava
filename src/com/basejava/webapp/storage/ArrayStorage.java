@@ -1,3 +1,7 @@
+package com.basejava.webapp.storage;
+
+import com.basejava.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -7,32 +11,44 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     private int storageSize;
 
-    void clear() {
-        for (int i = 0; i < storageSize; i++) {
-            storage[i] = null;
-        }
+    public void clear() {
+        Arrays.fill(storage, 0, storageSize - 1, null);
         storageSize = 0;
     }
 
-    void save(Resume resume) {
+    public void save(Resume resume) {
+        if (storageSize >= 10000) {
+            System.out.print("Хранилище полностью заполнено");
+            return;
+        }
         int index = getIndex(resume.toString());
         if (index >= 0) {
-            storage[index] = resume;
+            System.out.print("Резюме с таким uuid уже есть");
         } else {
             storage[storageSize] = resume;
             storageSize++;
         }
     }
 
-    Resume get(String uuid) {
+    public void update(Resume resume) {
+        int index = getIndex(resume.toString());
+        if (index >= 0) {
+            storage[index] = resume;
+        } else {
+            System.out.print("Резюме не найдено");
+        }
+    }
+
+    public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
             return storage[index];
         }
+        System.out.print("Резюме не найдено");
         return null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
             for (int i = index; i < (storageSize - 1); i++) {
@@ -40,6 +56,8 @@ public class ArrayStorage {
             }
             storageSize--;
             storage[storageSize] = null;
+        } else {
+            System.out.print("Резюме не найдено");
         }
     }
 
@@ -55,11 +73,11 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, storageSize);
     }
 
-    int size() {
+    public int size() {
         return storageSize;
     }
 }

@@ -48,10 +48,10 @@
 - [Официальная книга по Git](https://git-scm.com/book/ru/v2)
   
 ### Настройка проекта
-- Создайте на GitHub репозиторий с названием `basejava`
+- Создайте на GitHub репозиторий с названием `com.basejava`
 - Откройте консоль у себя на компьютере (в папке, где планируете разместить проект) и выполните следующее:
-  - **Скачайте копию проекта с заранее заданными классами: `git clone https://github.com/JavaOps/basejava.git`. Реализацию дз выполняйте в рамках данной копии**
-  - Перейдите в каталог проекта: `cd basejava`
+  - **Скачайте копию проекта с заранее заданными классами: `git clone https://github.com/JavaOps/com.basejava.git`. Реализацию дз выполняйте в рамках данной копии**
+  - Перейдите в каталог проекта: `cd com.basejava`
   - Настройте git у себя на компьютере на свой репозиторий в GitHub:  
     - `git remote set-url origin url_на_ваш_basejava-репозиторий.git` — настройка pull
     - `git remote set-url --push origin url_на_ваш_basejava-репозиторий.git` — настройка push
@@ -59,7 +59,7 @@
     - `git push -u origin master` — [устанавливаем связь](https://qna.habr.com/q/118865) между локальной и удаленной веткой master 
 
 ## Домашнее задание HW1
-- Создайте в IntelliJ IDEA новый проект, выбрав каталог `basejava`, который вы скачали ранее к себе на компьютер:
+- Создайте в IntelliJ IDEA новый проект, выбрав каталог `com.basejava`, который вы скачали ранее к себе на компьютер:
 
 ![newproject](https://user-images.githubusercontent.com/29703461/88058015-95008580-cb6b-11ea-9b7c-65843b859988.png)
 
@@ -69,7 +69,7 @@
 
 ![finish](https://user-images.githubusercontent.com/29703461/88059306-579cf780-cb6d-11ea-8094-bbf87474a127.png)
 
-- Реализуйте методы `save, get, delete, clear, getAll, size` в классе `ArrayStorage`, организовав хранение резюме в массиве 
+- Реализуйте методы `save, get, delete, clear, getAll, size` в классе `com.basejava.webapp.storage.ArrayStorage`, организовав хранение резюме в массиве 
 - Храните все резюме в начале `storage` (без пустот в виде `null`), чтобы не перебирать каждый раз все 10_000 элементов
 - При реализации метода `delete` учитывайте, что после удаления резюме между оставшимися резюме не должно быть пустых ячеек, заполненных null
 ```
@@ -79,7 +79,7 @@ r1, r2, r3,..., rn, null, null,..., null
 <----- size ----->
 <------- storage.length (10000) ------->
 ```
-- Проверьте вашу реализацию с помощью классов `MainArray.main()` и `MainTestArrayStorage.main()`
+- Проверьте вашу реализацию с помощью классов `com.basejava.webapp.MainArray.main()` и `com.basejava.webapp.MainTestArrayStorage.main()`
 - Изучите дополнительные материалы по IntelliJ IDEA:
   - [Idea Wiki](https://github.com/JavaOPs/topjava/wiki/IDEA) 
   - [Отладка Java кода в IDEA. Основные возможности отладчика](https://youtu.be/Z1BQsf0A4xY)
@@ -98,11 +98,11 @@ r1, r2, r3,..., rn, null, null,..., null
 1. Перед каждым коммитом не забывайте пользоваться сочетанием клавиш `Ctrl + Alt + L` (автоматическое форматирование кода)
 1. Удаляйте в классах неиспользуемые импорты (`Ctrl + Alt + O`)
 1. Не игнорируй подсказки IDEA (подсвечивает)
-1. В методе `clear()` обнуление массива предполагает обнуление (null) ячеек, где хранятся Resume, а не создание нового или присваивание ему null
+1. В методе `clear()` обнуление массива предполагает обнуление (null) ячеек, где хранятся com.basejava.webapp.model.Resume, а не создание нового или присваивание ему null
 1. При реализации методов не используйте коллекции
-1. Не меняйте сигнатуры методов в `ArrayStorage`
-1. Не добавляйте в `Resume` новые поля
-1. Resume r — давайте переменным осмысленные имена, например resume. r допустимо в коротких циклах и лямбда-выражениях
+1. Не меняйте сигнатуры методов в `com.basejava.webapp.storage.ArrayStorage`
+1. Не добавляйте в `com.basejava.webapp.model.Resume` новые поля
+1. com.basejava.webapp.model.Resume r — давайте переменным осмысленные имена, например resume. r допустимо в коротких циклах и лямбда-выражениях
 
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png)  5. [Вебинар "Быть программистом: от детства к зрелости"](https://www.youtube.com/watch?v=D5Hej0TyLaU)
   - [Слайды вебинара](https://docs.google.com/presentation/d/1YwtCCZsaGMdl-V15kTDHiJxiS52IAl-qqheNPpiNr54/)
