@@ -12,18 +12,18 @@ public class ArrayStorage {
     private int storageSize;
 
     public void clear() {
-        Arrays.fill(storage, 0, storageSize - 1, null);
+        Arrays.fill(storage, 0, storageSize , null);
         storageSize = 0;
     }
 
     public void save(Resume resume) {
-        if (storageSize >= 10000) {
+        if (storageSize >= storage.length) {
             System.out.print("Хранилище полностью заполнено");
             return;
         }
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.print("Резюме с таким uuid уже есть");
+            System.out.print("Резюме с uuid " + resume.getUuid() + " уже есть");
         } else {
             storage[storageSize] = resume;
             storageSize++;
@@ -35,7 +35,7 @@ public class ArrayStorage {
         if (index >= 0) {
             storage[index] = resume;
         } else {
-            System.out.print("Резюме не найдено");
+            System.out.print("Резюме с uuid " + resume.getUuid() + " не найдено");
         }
     }
 
@@ -44,20 +44,19 @@ public class ArrayStorage {
         if (index >= 0) {
             return storage[index];
         }
-        System.out.print("Резюме не найдено");
+        System.out.print("Резюме с uuid " + uuid + " не найдено");
         return null;
     }
 
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
-            for (int i = index; i < (storageSize - 1); i++) {
-                storage[i] = storage[i + 1];
-            }
+            if (storageSize - 1 - index >= 0)
+                System.arraycopy(storage, index + 1, storage, index, storageSize - 1 - index);
             storageSize--;
             storage[storageSize] = null;
         } else {
-            System.out.print("Резюме не найдено");
+            System.out.print("Резюме с uuid " + uuid + " не найдено");
         }
     }
 
