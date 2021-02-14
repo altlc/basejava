@@ -8,11 +8,11 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[10_000];
     private int storageSize;
 
     public void clear() {
-        Arrays.fill(storage, 0, storageSize , null);
+        Arrays.fill(storage, 0, storageSize, null);
         storageSize = 0;
     }
 
