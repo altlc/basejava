@@ -7,29 +7,13 @@ import com.basejava.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume resume) {
-        if (size >= STORAGE_LIMIT) {
-            System.out.print("Хранилище полностью заполнено");
-            return;
-        }
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            System.out.print("Резюме с uuid " + resume.getUuid() + " уже есть");
-        } else {
+    protected void addElement(Resume resume, int index) {
             storage[size] = resume;
-            size++;
-        }
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.print("Резюме с uuid " + uuid + " не найдено");
-        } else {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        }
+    protected void deleteElement(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
     protected int getIndex(String uuid) {
