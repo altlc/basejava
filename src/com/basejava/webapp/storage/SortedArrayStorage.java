@@ -8,9 +8,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     protected void addElement(Resume resume, int index) {
         index = -(index + 1);
-        if (size > 0) {
-            System.arraycopy(storage, index, storage, index + 1, size - index);
-        }
+        System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }
 
