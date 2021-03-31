@@ -4,6 +4,8 @@ import com.basejava.webapp.model.Resume;
 
 public interface Storage {
 
+    int getLimit();
+
     void clear();
 
     void update(Resume r);

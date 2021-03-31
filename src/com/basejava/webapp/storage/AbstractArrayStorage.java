@@ -1,7 +1,5 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.exception.ExistStorageException;
-import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
@@ -10,11 +8,16 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10_000;
+public abstract class AbstractArrayStorage extends AbstractStorage {
 
+    protected final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
+
+    @Override
+    public int getLimit() {
+        return STORAGE_LIMIT;
+    }
 
     public int size() {
         return size;
@@ -25,51 +28,35 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    public Resume realGet(int index) {
+        return storage[index];
     }
 
-    public void save(Resume resume) {
+    public void realSave(Resume resume) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Хранилище переполнено", resume.getUuid());
         }
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            addElement(resume, index);
-            size++;
-        }
+        addElement(resume);
+        size++;
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            storage[index] = resume;
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    public void realUpdate(Resume resume, int index) {
+        storage[index] = resume;
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            deleteElement(index);
-            size--;
-            storage[size] = null;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    public void realDelete(int index) {
+        deleteElement(index);
+        size--;
+        storage[size] = null;
+    }
+
+    protected boolean realCheckExists(int index) {
+        return index >= 0 && size > 0 && index < size;
     }
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void addElement(Resume resume, int index);
+    protected abstract void addElement(Resume resume);
 
     protected abstract void deleteElement(int index);
 

@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -19,7 +19,7 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME_4 = new Resume(UUID_4);
     private final Storage storage;
 
-    protected AbstractArrayStorageTest(Storage storage) {
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -66,15 +66,21 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = StorageException.class)
     public void storageOverflow() {
-        try {
-            for (int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+        int storageLimit = storage.getLimit();
+
+        if (storageLimit != 0) {
+            try {
+                for (int i = 4; i <= storageLimit; i++) {
+                    storage.save(new Resume());
+                }
+            } catch (Exception e) {
+                //e.printStackTrace();
+                Assert.fail("Ошибка, переполнение до заполнения хранилища");
             }
-        } catch (Exception e) {
-            //e.printStackTrace();
-            Assert.fail("Ошибка, переполнение до заполнения хранилища");
+            storage.save(new Resume());
+        } else {
+            throw new StorageException("Хранилище переполнено", new Resume().getUuid());
         }
-        storage.save(new Resume());
     }
 
     @Test
