@@ -10,14 +10,9 @@ import java.util.Arrays;
  */
 public abstract class AbstractArrayStorage extends AbstractStorage {
 
-    protected final int STORAGE_LIMIT = 10_000;
+    public static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
-
-    @Override
-    public int getLimit() {
-        return STORAGE_LIMIT;
-    }
 
     public int size() {
         return size;
@@ -28,35 +23,35 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public Resume realGet(int index) {
+    public Resume doGet(int index) {
         return storage[index];
     }
 
-    public void realSave(Resume resume) {
+    public void doSave(Resume resume, int index) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Хранилище переполнено", resume.getUuid());
         }
-        addElement(resume);
+        addElement(resume,index);
         size++;
     }
 
-    public void realUpdate(Resume resume, int index) {
+    public void doUpdate(Resume resume, int index) {
         storage[index] = resume;
     }
 
-    public void realDelete(int index) {
+    public void doDelete(int index) {
         deleteElement(index);
         size--;
         storage[size] = null;
     }
 
-    protected boolean realCheckExists(int index) {
-        return index >= 0 && size > 0 && index < size;
+    protected boolean isExist(int index) {
+        return index >= 0;
     }
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void addElement(Resume resume);
+    protected abstract void addElement(Resume resume, int index);
 
     protected abstract void deleteElement(int index);
 

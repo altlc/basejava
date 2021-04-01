@@ -18,9 +18,11 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3 = new Resume(UUID_3);
     private static final Resume RESUME_4 = new Resume(UUID_4);
     private final Storage storage;
+    private final int STORAGE_LIMIT;
 
-    protected AbstractStorageTest(Storage storage) {
+    protected AbstractStorageTest(Storage storage,int STORAGE_LIMIT) {
         this.storage = storage;
+        this.STORAGE_LIMIT = STORAGE_LIMIT;
     }
 
     @Before
@@ -66,11 +68,9 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = StorageException.class)
     public void storageOverflow() {
-        int storageLimit = storage.getLimit();
-
-        if (storageLimit != 0) {
+       if (STORAGE_LIMIT != 0) {
             try {
-                for (int i = 4; i <= storageLimit; i++) {
+                for (int i = 4; i <= STORAGE_LIMIT; i++) {
                     storage.save(new Resume());
                 }
             } catch (Exception e) {

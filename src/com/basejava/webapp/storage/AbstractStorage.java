@@ -5,51 +5,49 @@ import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    public abstract int getLimit();
-
     protected abstract int getIndex(String uuid);
 
-    protected abstract Resume realGet(int index);
+    protected abstract Resume doGet(int index);
 
-    protected abstract void realUpdate(Resume r, int index);
+    protected abstract void doUpdate(Resume r, int index);
 
-    protected abstract void realSave(Resume r);
+    protected abstract void doSave(Resume r, int index);
 
-    protected abstract boolean realCheckExists(int index);
+    protected abstract boolean isExist(int index);
 
-    protected abstract void realDelete(int index);
+    protected abstract void doDelete(int index);
 
     public void save(Resume r) {
-        checkNotExists(r.getUuid());
-        realSave(r);
+        int index = checkNotExist(r.getUuid());
+        doSave(r, index);
     }
 
     public void update(Resume r) {
-        int index = checkExists(r.getUuid());
-        realUpdate(r, index);
+        int index = checkExist(r.getUuid());
+        doUpdate(r, index);
     }
 
     public void delete(String uuid) {
-        int index = checkExists(uuid);
-        realDelete(index);
+        int index = checkExist(uuid);
+        doDelete(index);
     }
 
     public Resume get(String uuid) {
-        int index = checkExists(uuid);
-        return realGet(index);
+        int index = checkExist(uuid);
+        return doGet(index);
     }
 
-    private int checkExists(String uuid) {
+    private int checkExist(String uuid) {
         int index = getIndex(uuid);
-        if (!realCheckExists(index)) {
+        if (!isExist(index)) {
             throw new NotExistStorageException(uuid);
         }
         return index;
     }
 
-    private int checkNotExists(String uuid) {
+    private int checkNotExist(String uuid) {
         int index = getIndex(uuid);
-        if (realCheckExists(index)) {
+        if (isExist(index)) {
             throw new ExistStorageException(uuid);
         }
         return index;

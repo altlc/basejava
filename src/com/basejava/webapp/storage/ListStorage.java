@@ -7,11 +7,7 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private List<Resume> list = new ArrayList<>();
-
-    @Override
-    public int getLimit() {
-        return 0;
-    }
+    public static final int STORAGE_LIMIT =0;
 
     @Override
     protected int getIndex(String uuid) {
@@ -24,27 +20,27 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean realCheckExists(int index) {
+    protected boolean isExist(int index) {
         return index >= 0 && index < list.size();
     }
 
     @Override
-    protected Resume realGet(int index) {
+    protected Resume doGet(int index) {
         return list.get(index);
     }
 
     @Override
-    protected void realSave(Resume r) {
+    protected void doSave(Resume r, int index) {
         list.add(r);
     }
 
     @Override
-    protected void realUpdate(Resume r, int index) {
+    protected void doUpdate(Resume r, int index) {
         list.set(index, r);
     }
 
     @Override
-    protected void realDelete(int index) {
+    protected void doDelete(int index) {
         list.remove(index);
     }
 
