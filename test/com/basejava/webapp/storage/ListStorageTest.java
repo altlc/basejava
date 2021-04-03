@@ -2,6 +2,6 @@ package com.basejava.webapp.storage;
 
 public class ListStorageTest extends AbstractStorageTest  {
     public ListStorageTest() {
-        super(new ListStorage(), ListStorage.STORAGE_LIMIT);
+        super(new ListStorage());
     }
 }

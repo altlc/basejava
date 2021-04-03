@@ -2,7 +2,6 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,16 +12,16 @@ public abstract class AbstractStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
+    private static final String DUMMY_UUID = "dummy";
     private static final Resume RESUME_1 = new Resume(UUID_1);
     private static final Resume RESUME_2 = new Resume(UUID_2);
     private static final Resume RESUME_3 = new Resume(UUID_3);
     private static final Resume RESUME_4 = new Resume(UUID_4);
-    private final Storage storage;
-    private final int STORAGE_LIMIT;
+    private static final Resume DUMMY_RESUME = new Resume(DUMMY_UUID);
+    protected final Storage storage;
 
-    protected AbstractStorageTest(Storage storage,int STORAGE_LIMIT) {
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
-        this.STORAGE_LIMIT = STORAGE_LIMIT;
     }
 
     @Before
@@ -51,7 +50,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() throws Exception {
-        storage.get("dummy");
+        storage.get(DUMMY_UUID);
     }
 
     @Test
@@ -66,23 +65,6 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_2);
     }
 
-    @Test(expected = StorageException.class)
-    public void storageOverflow() {
-       if (STORAGE_LIMIT != 0) {
-            try {
-                for (int i = 4; i <= STORAGE_LIMIT; i++) {
-                    storage.save(new Resume());
-                }
-            } catch (Exception e) {
-                //e.printStackTrace();
-                Assert.fail("Ошибка, переполнение до заполнения хранилища");
-            }
-            storage.save(new Resume());
-        } else {
-            throw new StorageException("Хранилище переполнено", new Resume().getUuid());
-        }
-    }
-
     @Test
     public void update() {
         storage.update(RESUME_2);
@@ -91,7 +73,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNonExists() {
-        storage.update(new Resume("dummy"));
+        storage.update(DUMMY_RESUME);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -103,7 +85,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNonExists() {
-        storage.delete("dummy");
+        storage.delete(DUMMY_UUID);
     }
 
     @Test

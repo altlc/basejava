@@ -7,7 +7,6 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private List<Resume> list = new ArrayList<>();
-    public static final int STORAGE_LIMIT =0;
 
     @Override
     protected int getIndex(String uuid) {
@@ -21,7 +20,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(int index) {
-        return index >= 0 && index < list.size();
+        return index >= 0;
     }
 
     @Override
