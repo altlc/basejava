@@ -2,12 +2,12 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class MapStorage extends AbstractStorage {
 
-    private final Map<String, Resume> map = new TreeMap<>();
+    private final Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected Object getKey(String uuid) {
