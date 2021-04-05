@@ -23,33 +23,33 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public Resume doGet(int index) {
-        return storage[index];
+    public Resume doGet(Object key) {
+        return storage[(Integer)key];
     }
 
-    public void doSave(Resume resume, int index) {
+    public void doSave(Resume resume, Object key) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Хранилище переполнено", resume.getUuid());
         }
-        addElement(resume,index);
+        addElement(resume,(Integer)key);
         size++;
     }
 
-    public void doUpdate(Resume resume, int index) {
-        storage[index] = resume;
+    public void doUpdate(Resume resume, Object key) {
+        storage[(Integer)key] = resume;
     }
 
-    public void doDelete(int index) {
-        deleteElement(index);
+    public void doDelete(Object key) {
+        deleteElement((Integer)key);
         size--;
         storage[size] = null;
     }
 
-    protected boolean isExist(int index) {
-        return index >= 0;
+    protected boolean isExist(Object key) {
+        return (Integer)key >= 0;
     }
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getKey(String uuid);
 
     protected abstract void addElement(Resume resume, int index);
 
