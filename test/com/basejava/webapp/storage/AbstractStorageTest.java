@@ -97,6 +97,6 @@ public abstract class AbstractStorageTest {
         List<Resume> expected = Arrays.asList(RESUME_1,RESUME_2,RESUME_3);
 
         Assert.assertEquals(3, actual.size());
-        Assert.assertEquals(actual,expected);
+        Assert.assertEquals(expected,actual);
     }
 }

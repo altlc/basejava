@@ -4,7 +4,6 @@ import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
 
-import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
@@ -58,9 +57,9 @@ public abstract class AbstractStorage implements Storage {
     protected abstract List<Resume> getAll();
 
     public List<Resume> getAllSorted() {
-        List<Resume> AllList = getAll();
-        Collections.sort(AllList);
-        return AllList;
+        List<Resume> allResume = getAll();
+        allResume.sort(Resume::compareTo);
+        return allResume;
     }
 
 
