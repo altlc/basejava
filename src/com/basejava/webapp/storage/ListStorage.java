@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage<Integer> {
-    private List<Resume> list = new ArrayList<>();
+    private final List<Resume> list = new ArrayList<>();
 
     @Override
     protected Integer getKey(String uuid) {
@@ -19,18 +19,8 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected boolean isExist(Integer key) {
-        return key >= 0;
-    }
-
-    @Override
     protected Resume doGet(Integer key) {
         return list.get(key);
-    }
-
-    @Override
-    protected void doSave(Resume r, Integer key) {
-        list.add(r);
     }
 
     @Override
@@ -39,17 +29,27 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
+    protected void doSave(Resume r, Integer key) {
+        list.add(r);
+    }
+
+    @Override
+    protected boolean isExist(Integer key) {
+        return key >= 0;
+    }
+
+    @Override
     protected void doDelete(Integer key) {
         list.remove((int)key);
+    }
+
+    public List<Resume> getAll() {
+        return list;
     }
 
     @Override
     public void clear() {
         list.clear();
-    }
-
-    public List<Resume> getAll() {
-        return list;
     }
 
     @Override
