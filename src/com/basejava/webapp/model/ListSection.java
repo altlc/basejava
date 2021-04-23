@@ -15,12 +15,8 @@ public class ListSection extends AbstractSection {
     }
 
     @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (String item : contentList) {
-            result.append(" • ").append(item).append("\n");
-        }
-        return result.toString();
+    public int hashCode() {
+        return Objects.hash(contentList);
     }
 
     @Override
@@ -32,7 +28,11 @@ public class ListSection extends AbstractSection {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(contentList);
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (String item : contentList) {
+            result.append(" • ").append(item).append("\n");
+        }
+        return result.toString();
     }
 }

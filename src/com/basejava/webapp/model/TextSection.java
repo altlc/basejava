@@ -10,8 +10,8 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public String toString() {
-        return content + "\n";
+    public int hashCode() {
+        return Objects.hash(content);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(content);
+    public String toString() {
+        return content + "\n";
     }
 }

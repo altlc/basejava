@@ -21,10 +21,8 @@ public class Experience {
     }
 
     @Override
-    public String toString() {
-        return  organisation + " " + url + "\n" +
-                " c " + startDate + " по " + endDate + " " + jobTitle + "\n" +
-                description + "\n";
+    public int hashCode() {
+        return Objects.hash(startDate, endDate, organisation, url, jobTitle, description);
     }
 
     @Override
@@ -43,7 +41,9 @@ public class Experience {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(startDate, endDate, organisation, url, jobTitle, description);
+    public String toString() {
+        return organisation + " " + url + "\n" +
+                " c " + startDate + " по " + endDate + " " + jobTitle + "\n" +
+                description + "\n";
     }
 }

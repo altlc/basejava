@@ -10,21 +10,17 @@ public class OrganizationSection extends AbstractSection {
         this.periods = periods;
     }
 
-
     public void addPeriod(Experience period) {
         periods.add(period);
     }
+
     public List<Experience> getPeriods() {
         return periods;
     }
 
     @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (Experience period : periods) {
-            result.append(period.toString()).append("\n");
-        }
-        return result.toString();
+    public int hashCode() {
+        return Objects.hash(periods);
     }
 
     @Override
@@ -36,9 +32,12 @@ public class OrganizationSection extends AbstractSection {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(periods);
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (Experience period : periods) {
+            result.append(period.toString()).append("\n");
+        }
+        return result.toString();
     }
-
 
 }
