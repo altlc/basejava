@@ -25,7 +25,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     public Resume doGet(Integer key) {
-        return storage[(Integer)key];
+        return storage[key];
     }
 
     public void doSave(Resume resume, Integer key) {
@@ -47,7 +47,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     protected boolean isExist(Integer key) {
-        return (Integer)key >= 0;
+        return key >= 0;
     }
 
     protected abstract Integer getKey(String uuid);
