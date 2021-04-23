@@ -73,10 +73,10 @@ public class Resume implements Comparable<Resume> {
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        result.append(uuid).append("\n").append(fullName).append("\n");
+        result.append(uuid).append("\n").append("\033[1m").append(fullName).append("\033[0m").append("\n\n");
         contacts.forEach((k, v) -> result.append(k.getTitle()).append(": ").append(v).append("\n"));
         result.append("\n");
-        sections.forEach((k, v) -> result.append(k.getTitle()).append("\n\n").append(v).append("\n"));
+        sections.forEach((k, v) -> result.append("\033[1m").append(k.getTitle()).append("\n\n").append("\033[0m").append(v).append("\n"));
 
         return result.toString();
     }
