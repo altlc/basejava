@@ -3,16 +3,24 @@ package com.basejava.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ListSection extends Section {
+public class ListSection extends AbstractSection {
     private final List<String> contentList;
 
     public ListSection(List<String> contentList) {
         this.contentList = contentList;
     }
 
+    public List<String> getContentList() {
+        return contentList;
+    }
+
     @Override
     public String toString() {
-        return contentList.toString();
+        StringBuilder result = new StringBuilder();
+        for (String item : contentList) {
+            result.append(" • ").append(item).append("\n");
+        }
+        return result.toString();
     }
 
     @Override
@@ -26,9 +34,5 @@ public class ListSection extends Section {
     @Override
     public int hashCode() {
         return Objects.hash(contentList);
-    }
-
-    public List<String> getContentList() {
-        return contentList;
     }
 }

@@ -18,7 +18,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
 
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
-        resume.addSection(SectionType.PERSONAL, new TextSection(" Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
 
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
@@ -49,8 +49,8 @@ public class ResumeTestData {
 
         //resume.addSection(SectionType.EXPERIENCE,);
 
-        List<ResumePeriod> periods = Arrays.asList(
-                new ResumePeriod(
+        List<Experience> periods = Arrays.asList(
+                new Experience(
                         LocalDate.of(1997, 9, 1),
                         LocalDate.of(2005, 1, 1),
                         "Alcatel",
@@ -58,7 +58,7 @@ public class ResumeTestData {
                         "Инженер по аппаратному и программному тестированию",
                         "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)"),
 
-                new ResumePeriod(
+                new Experience(
                         LocalDate.of(2005, 1, 1),
                         LocalDate.of(2007, 2, 1),
                         "Siemens AG",
@@ -67,10 +67,10 @@ public class ResumeTestData {
                         "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)")
                 );
 
-        resume.addSection(SectionType.EXPERIENCE, new ResumePeriodSection(periods));
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(periods));
 
         periods = Arrays.asList(
-                new ResumePeriod(
+                new Experience(
                         LocalDate.of(1993, 9, 1),
                         LocalDate.of(1996, 7, 1),
                         "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
@@ -78,7 +78,7 @@ public class ResumeTestData {
                         "",
                         "Аспирантура (программист С, С++)"),
 
-                new ResumePeriod(
+                new Experience(
                         LocalDate.of(1987, 9, 1),
                         LocalDate.of(1993, 7, 1),
                         "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
@@ -86,7 +86,7 @@ public class ResumeTestData {
                         "",
                         "Инженер (программист Fortran, C)"),
 
-                new ResumePeriod(
+                new Experience(
                         LocalDate.of(1984, 9, 1),
                         LocalDate.of(1987, 6, 1),
                         "Заочная физико-техническая школа при МФТИ",
@@ -95,7 +95,7 @@ public class ResumeTestData {
                         "Закончил с отличием")
         );
 
-        resume.addSection(SectionType.EDUCATION, new ResumePeriodSection(periods));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(periods));
         System.out.println(resume);
     }
 }

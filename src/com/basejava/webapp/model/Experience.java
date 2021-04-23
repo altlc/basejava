@@ -3,7 +3,7 @@ package com.basejava.webapp.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class ResumePeriod {
+public class Experience {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String organisation;
@@ -11,7 +11,7 @@ public class ResumePeriod {
     private final String jobTitle;
     private final String description;
 
-    public ResumePeriod(LocalDate startDate, LocalDate endDate, String organisation, String url, String jobTitle, String description) {
+    public Experience(LocalDate startDate, LocalDate endDate, String organisation, String url, String jobTitle, String description) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.organisation = organisation;
@@ -22,14 +22,9 @@ public class ResumePeriod {
 
     @Override
     public String toString() {
-        return "ResumePeriod{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", organisation='" + organisation + '\'' +
-                ", url='" + url + '\'' +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return  organisation + " " + url + "\n" +
+                " c " + startDate + " по " + endDate + " " + jobTitle + "\n" +
+                description + "\n";
     }
 
     @Override
@@ -37,7 +32,7 @@ public class ResumePeriod {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ResumePeriod that = (ResumePeriod) o;
+        Experience that = (Experience) o;
 
         if (!startDate.equals(that.startDate)) return false;
         if (!endDate.equals(that.endDate)) return false;
