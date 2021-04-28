@@ -4,23 +4,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
-    private final List<Experience> periods;
+    private final List<Organisation> organisationList;
 
-    public OrganizationSection(List<Experience> periods) {
-        this.periods = periods;
+    public OrganizationSection(List<Organisation> organisations) {
+        this.organisationList = organisations;
     }
 
-    public void addPeriod(Experience period) {
-        periods.add(period);
+    public void addOrganisation(Organisation organisation) {
+        organisationList.add(organisation);
     }
 
-    public List<Experience> getPeriods() {
-        return periods;
+    public List<Organisation> getOrganisationsList() {
+        return organisationList;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periods);
+        return Objects.hash(organisationList);
     }
 
     @Override
@@ -28,14 +28,14 @@ public class OrganizationSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrganizationSection that = (OrganizationSection) o;
-        return periods.equals(that.periods);
+        return organisationList.equals(that.organisationList);
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (Experience period : periods) {
-            result.append(period.toString()).append("\n");
+        for (Organisation organisation : organisationList) {
+            result.append(organisation.toString()).append("\n");
         }
         return result.toString();
     }

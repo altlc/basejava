@@ -10,17 +10,19 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.basejava.webapp.ResumeTestData.generateResume;
+
 public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
     private static final String DUMMY_UUID = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1,"TEST1");
-    private static final Resume RESUME_2 = new Resume(UUID_2,"TEST2");
-    private static final Resume RESUME_3 = new Resume(UUID_3,"TEST3");
-    private static final Resume RESUME_4 = new Resume(UUID_4,"TEST4");
-    private static final Resume DUMMY_RESUME = new Resume(DUMMY_UUID,"DUMMY");
+    private static final Resume RESUME_1 = generateResume(UUID_1,"TEST1");
+    private static final Resume RESUME_2 = generateResume(UUID_2,"TEST2");
+    private static final Resume RESUME_3 = generateResume(UUID_3,"TEST3");
+    private static final Resume RESUME_4 = generateResume(UUID_4,"TEST4");
+    private static final Resume DUMMY_RESUME = generateResume(DUMMY_UUID,"DUMMY");
     protected final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {

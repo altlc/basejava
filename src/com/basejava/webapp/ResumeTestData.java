@@ -3,12 +3,17 @@ package com.basejava.webapp;
 import com.basejava.webapp.model.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = new Resume("Григорий Кислин");
+        System.out.println(generateResume("12131423423423","Григорий Кислин"));
+    }
+
+    public static Resume generateResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
         resume.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -46,55 +51,54 @@ public class ResumeTestData {
                 "Родной русский, английский \"upper intermediate\""
         )));
 
-        //resume.addSection(SectionType.EXPERIENCE,);
+        List<Organisation> workList = new ArrayList<>();
 
-        List<Experience> periods = Arrays.asList(
-                new Experience(
-                        LocalDate.of(1997, 9, 1),
-                        LocalDate.of(2005, 1, 1),
-                        "Alcatel",
-                        "http://www.alcatel.ru/",
-                        "Инженер по аппаратному и программному тестированию",
-                        "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)"),
+        Organisation organisation = new Organisation("Alcatel", "http://www.alcatel.ru/");
+        organisation.addStage(LocalDate.of(1997, 9, 1),
+                LocalDate.of(2005, 1, 1),
+                "Инженер по аппаратному и программному тестированию",
+                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)");
 
-                new Experience(
-                        LocalDate.of(2005, 1, 1),
-                        LocalDate.of(2007, 2, 1),
-                        "Siemens AG",
-                        "https://www.siemens.com/ru/ru/home.html",
-                        "Разработчик ПО",
-                        "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)")
-        );
+        workList.add(organisation);
 
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(periods));
+        organisation = new Organisation("Siemens AG", "https://www.siemens.com/ru/ru/home.html");
+        organisation.addStage(LocalDate.of(2005, 1, 1),
+                LocalDate.of(2007, 2, 1),
+                "Разработчик ПО",
+                "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)");
 
-        periods = Arrays.asList(
-                new Experience(
-                        LocalDate.of(1993, 9, 1),
-                        LocalDate.of(1996, 7, 1),
-                        "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                        "http://www.ifmo.ru/",
-                        "",
-                        "Аспирантура (программист С, С++)"),
+        workList.add(organisation);
 
-                new Experience(
-                        LocalDate.of(1987, 9, 1),
-                        LocalDate.of(1993, 7, 1),
-                        "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                        "http://www.ifmo.ru/",
-                        "",
-                        "Инженер (программист Fortran, C)"),
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(workList));
 
-                new Experience(
-                        LocalDate.of(1984, 9, 1),
-                        LocalDate.of(1987, 6, 1),
-                        "Заочная физико-техническая школа при МФТИ",
-                        "http://www.school.mipt.ru/",
-                        "",
-                        "Закончил с отличием")
-        );
+        List<Organisation> educationList = new ArrayList<>();
 
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(periods));
-        System.out.println(resume);
+        organisation = new Organisation("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
+                "http://www.ifmo.ru/");
+
+        organisation.addStage(LocalDate.of(1993, 9, 1),
+                LocalDate.of(1996, 7, 1),
+                "",
+                "Аспирантура (программист С, С++)");
+
+        organisation.addStage(LocalDate.of(1987, 9, 1),
+                LocalDate.of(1993, 7, 1),
+                "",
+                "Инженер (программист Fortran, C)");
+
+        educationList.add(organisation);
+
+        organisation = new Organisation("Заочная физико-техническая школа при МФТИ",
+                "http://www.school.mipt.ru/");
+
+        organisation.addStage(LocalDate.of(1984, 9, 1),
+                LocalDate.of(1987, 6, 1),
+                "",
+                "Закончил с отличием");
+
+        educationList.add(organisation);
+
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        return resume;
     }
 }
