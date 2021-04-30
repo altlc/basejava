@@ -13,6 +13,8 @@ import java.util.List;
 import static com.basejava.webapp.ResumeTestData.generateResume;
 
 public abstract class AbstractStorageTest {
+    protected static final String STORAGE_DIR = ".\\storage\\";
+
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";

@@ -2,17 +2,21 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.serializer.Serializer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private final Serializer serializer;
 
-    protected AbstractFileStorage(File directory) {
+
+    protected FileStorage(String dir, Serializer serializer) {
+        directory = new File(dir);
+        this.serializer = serializer;
         Objects.requireNonNull(directory, "Название папки не может быть пустым");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " не папка");
@@ -20,7 +24,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " не позволяет производить чтение/запись");
         }
-        this.directory = directory;
     }
 
     @Override
@@ -46,7 +49,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doGetFile(file);
+            return serializer.doGetFile(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Ошибка чтения файла ", file.getName(), e);
         }
@@ -55,9 +58,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            doPutFile(r, file);
+            serializer.doPutFile(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("Ошибка записи файла", file.getName(), e);
+            throw new StorageException("Ошибка записи файла ", file.getName(), e);
         }
     }
 
@@ -67,7 +70,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             if (!file.createNewFile()) {
                 throw new StorageException("Файл существует", file.getName());
             }
-            doPutFile(r, file);
+            doUpdate(r, file);
         } catch (IOException e) {
             throw new StorageException("Ошибка записи файла ", file.getName(), e);
         }
@@ -98,7 +101,4 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         return list;
     }
 
-    protected abstract Resume doGetFile(File file) throws IOException;
-
-    protected abstract void doPutFile(Resume r, File file) throws IOException;
 }

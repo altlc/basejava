@@ -1,11 +1,12 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Organisation {
+public class Organisation implements Serializable {
 
     private final String organisation;
     private final String url;

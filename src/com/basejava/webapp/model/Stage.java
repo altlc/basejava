@@ -1,9 +1,12 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Stage {
+public class Stage implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String jobTitle;
