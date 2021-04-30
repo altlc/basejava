@@ -6,16 +6,16 @@ import java.util.Objects;
 public class MainFile {
     public static void main(String[] args) {
         File[] files = new File("./").listFiles();
-        if (files != null) fileList(files);
+        if (files != null) fileList(files,"");
     }
 
-    public static void fileList(File[] files) {
+    public static void fileList(File[] files, String tab) {
         for (File file : files) {
             if (file.isDirectory()) {
-                System.out.println("Dir: " + file);
-                fileList(Objects.requireNonNull(file.listFiles()));
+                System.out.println(tab + file.getName());
+                fileList(Objects.requireNonNull(file.listFiles()), tab + "\t");
             } else {
-                System.out.println("File: " + file);
+                System.out.println(tab + file.getName());
             }
         }
     }
