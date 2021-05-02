@@ -21,6 +21,7 @@ public class MapStorageByResume extends AbstractStorage<Resume> {
         map.remove(key.getUuid());
     }
 
+    @Override
     public List<Resume> getAll() {
         return new ArrayList<>(map.values());
     }

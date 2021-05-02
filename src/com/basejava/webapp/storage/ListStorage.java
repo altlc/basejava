@@ -18,6 +18,7 @@ public class ListStorage extends AbstractStorage<Integer> {
         list.remove((int) key);
     }
 
+    @Override
     public List<Resume> getAll() {
         return list;
     }

@@ -41,23 +41,6 @@ public class PathStorage extends AbstractStorage<Path> {
         return (int) getAllFiles().count();
     }
 
-    protected Stream<Path> getAllFiles() {
-        try {
-            return Files.list(directory);
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
-        }
-    }
-
-    protected String getFileName(Path file) {
-        return file.getFileName().toString();
-    }
-
-    @Override
-    protected Path getKey(String uuid) {
-        return directory.resolve(uuid);
-    }
-
     @Override
     protected Resume doGet(Path file) {
         try {
@@ -65,30 +48,6 @@ public class PathStorage extends AbstractStorage<Path> {
         } catch (IOException e) {
             throw new StorageException("File read error ", getFileName(file), e);
         }
-    }
-
-    @Override
-    protected void doUpdate(Resume r, Path file) {
-        try {
-            serializer.doPutFile(r, new BufferedOutputStream(Files.newOutputStream(file)));
-        } catch (IOException e) {
-            throw new StorageException("File write error ", r.getUuid(), e);
-        }
-    }
-
-    @Override
-    protected void doSave(Resume r, Path file) {
-        try {
-            Files.createFile(file);
-        } catch (IOException e) {
-            throw new StorageException("Couldn't create file " + file.toAbsolutePath(), getFileName(file), e);
-        }
-        doUpdate(r, file);
-    }
-
-    @Override
-    protected boolean isExist(Path file) {
-        return Files.exists(file);
     }
 
     @Override
@@ -106,4 +65,44 @@ public class PathStorage extends AbstractStorage<Path> {
         return getAllFiles().map(this::doGet).collect(Collectors.toList());
     }
 
+    @Override
+    protected void doSave(Resume r, Path file) {
+        try {
+            Files.createFile(file);
+        } catch (IOException e) {
+            throw new StorageException("Couldn't create file " + file.toAbsolutePath(), getFileName(file), e);
+        }
+        doUpdate(r, file);
+    }
+
+    @Override
+    protected Path getKey(String uuid) {
+        return directory.resolve(uuid);
+    }
+
+    @Override
+    protected boolean isExist(Path file) {
+        return Files.exists(file);
+    }
+
+    @Override
+    protected void doUpdate(Resume r, Path file) {
+        try {
+            serializer.doPutFile(r, new BufferedOutputStream(Files.newOutputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File write error ", r.getUuid(), e);
+        }
+    }
+
+    private Stream<Path> getAllFiles() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("Directory read error", null);
+        }
+    }
+
+    private String getFileName(Path file) {
+        return file.getFileName().toString();
+    }
 }
