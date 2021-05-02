@@ -4,13 +4,16 @@ import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.serializer.Serializer;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -19,38 +22,49 @@ public class PathStorage extends AbstractStorage<Path> {
     protected PathStorage(String dir, Serializer serializer) {
         directory = Paths.get(dir);
         this.serializer = serializer;
-        Objects.requireNonNull(directory, "Название папки не может быть пустым");
+        Objects.requireNonNull(directory, " directory must not be null");
         if (!Files.isDirectory(directory)) {
-            throw new IllegalArgumentException(directory.toAbsolutePath() + " не папка");
+            throw new IllegalArgumentException(directory.toAbsolutePath() + " is not directory");
         }
         if (!Files.isWritable(directory) || !Files.isReadable(directory)) {
-            throw new IllegalArgumentException(directory.toAbsolutePath() + " не позволяет производить чтение/запись");
+            throw new IllegalArgumentException(directory.toAbsolutePath() + " is not readable/writable");
         }
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Ошибка удаления файла", null);
-        }
+        getAllFiles().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
-        List<String> files = new ArrayList<>();
+        return (int) getAllFiles().count();
+    }
+
+    protected Stream<Path> getAllFiles() {
         try {
-            Files.list(directory).forEach(file -> files.add(file.toString()));
-        } catch (IOException ex) {
-            throw new StorageException("Ошибка чтения папки", null);
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("Directory read error", null);
         }
-        return files.size();
+    }
+
+    protected String getFileName(Path file) {
+        return file.getFileName().toString();
     }
 
     @Override
     protected Path getKey(String uuid) {
-        return Path.of(directory.toString(),uuid);
+        return directory.resolve(uuid);
+    }
+
+    @Override
+    protected Resume doGet(Path file) {
+        try {
+            return serializer.doGetFile(new BufferedInputStream(Files.newInputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File read error ", getFileName(file), e);
+        }
     }
 
     @Override
@@ -58,8 +72,18 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             serializer.doPutFile(r, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("Ошибка записи файла ", r.getUuid(), e);
+            throw new StorageException("File write error ", r.getUuid(), e);
         }
+    }
+
+    @Override
+    protected void doSave(Resume r, Path file) {
+        try {
+            Files.createFile(file);
+        } catch (IOException e) {
+            throw new StorageException("Couldn't create file " + file.toAbsolutePath(), getFileName(file), e);
+        }
+        doUpdate(r, file);
     }
 
     @Override
@@ -68,47 +92,18 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void doSave(Resume r, Path file) {
-        try {
-            Files.createFile(file);
-        } catch (IOException e) {
-            throw new StorageException("Не возможно создать файл " + file.toAbsolutePath(), getFileName(file), e);
-        }
-        doUpdate(r, file);
-    }
-
-    @Override
-    protected Resume doGet(Path file) {
-        try {
-            return serializer.doGetFile(new BufferedInputStream(Files.newInputStream(file)));
-        } catch (IOException e) {
-            throw new StorageException("Ошибка чтения файла ", getFileName(file), e);
-        }
-    }
-
-    @Override
     protected void doDelete(Path file) {
         try {
             Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException("Ошибка удаления файла ", getFileName(file));
+            throw new StorageException("File delete error ", getFileName(file));
         }
 
     }
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> list = new ArrayList<>();
-        try {
-            Files.list(directory).forEach(file -> list.add(doGet(file)));
-        } catch (IOException ex) {
-            throw new StorageException("Ошибка чтения папки", null);
-        }
-        return list;
-    }
-
-    protected String getFileName(Path file) {
-        return file.getFileName().toString();
+        return getAllFiles().map(this::doGet).collect(Collectors.toList());
     }
 
 }

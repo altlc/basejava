@@ -1,20 +1,30 @@
 package com.basejava.webapp.model;
 
+import com.basejava.webapp.storage.Link;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class Organisation implements Serializable {
 
-    private final String organisation;
-    private final String url;
-    private final List<Stage> stages = new ArrayList<>();
+    private final Link homePage;
+    private List<Stage> stages = new ArrayList<>();
 
-    public Organisation(String organisation, String url) {
-        this.organisation = organisation;
-        this.url = url;
+    public Organisation(String name, String url, Stage... stages) {
+        this(new Link(name, url), Arrays.asList(stages));
+    }
+
+    public Organisation(Link homePage, List<Stage> stages) {
+        this.homePage = homePage;
+        this.stages = stages;
+    }
+
+    public Organisation(String name, String url, List<Stage> stages) {
+        this(new Link(name, url), stages);
     }
 
     public void addStage(LocalDate startDate, LocalDate endDate, String jobTitle, String description) {
@@ -22,25 +32,79 @@ public class Organisation implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(homePage, stages);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organisation that = (Organisation) o;
-        return organisation.equals(that.organisation) && url.equals(that.url) && stages.equals(that.stages);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(organisation, url, stages);
+        return homePage.equals(that.homePage) && stages.equals(that.stages);
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(" • ").append(organisation).append(" ").append(url).append("\n");
-        for(Stage period: stages) {
+        result.append(" • ").append(homePage).append("\n");
+        for (Stage period : stages) {
             result.append(period);
         }
         return result.toString();
     }
+
+    public static class Stage implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final LocalDate startDate;
+        private final LocalDate endDate;
+        private final String jobTitle;
+        private final String description;
+
+        public Stage(LocalDate startDate, LocalDate endDate, String jobTitle, String description) {
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
+            Objects.requireNonNull(jobTitle, "title must not be null");
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.jobTitle = jobTitle;
+            this.description = description;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
+        }
+
+        public String getJobTitle() {
+            return jobTitle;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(startDate, endDate, jobTitle, description);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Stage stage = (Stage) o;
+            return startDate.equals(stage.startDate) && endDate.equals(stage.endDate) && jobTitle.equals(stage.jobTitle) && description.equals(stage.description);
+        }
+
+        @Override
+        public String toString() {
+            return " -> c " + startDate + " по " + endDate + " " + jobTitle + "\n" + description + "\n";
+        }
+    }
+
 }

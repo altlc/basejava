@@ -15,29 +15,35 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public int size() {
-        return size;
-    }
-
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
+    public int size() {
+        return size;
+    }
+
+    protected abstract Integer getKey(String uuid);
+
     public Resume doGet(Integer key) {
         return storage[key];
     }
 
+    public void doUpdate(Resume resume, Integer key) {
+        storage[key] = resume;
+    }
+
     public void doSave(Resume resume, Integer key) {
         if (size >= STORAGE_LIMIT) {
-            throw new StorageException("Хранилище переполнено", resume.getUuid());
+            throw new StorageException("Storage overflow ", resume.getUuid());
         }
-        addElement(resume,key);
+        addElement(resume, key);
         size++;
     }
 
-    public void doUpdate(Resume resume, Integer key) {
-        storage[key] = resume;
+    protected boolean isExist(Integer key) {
+        return key >= 0;
     }
 
     public void doDelete(Integer key) {
@@ -45,14 +51,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         size--;
         storage[size] = null;
     }
-
-    protected boolean isExist(Integer key) {
-        return key >= 0;
-    }
-
-    protected abstract Integer getKey(String uuid);
-
-    protected abstract void addElement(Resume resume, int index);
 
     protected abstract void deleteElement(int index);
 
@@ -63,5 +61,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
+    protected abstract void addElement(Resume resume, int index);
 
 }

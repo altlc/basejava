@@ -6,7 +6,7 @@ import java.util.Objects;
 public class MainFile {
     public static void main(String[] args) {
         File[] files = new File("./").listFiles();
-        if (files != null) fileList(files,"");
+        if (files != null) fileList(files, "");
     }
 
     public static void fileList(File[] files, String tab) {

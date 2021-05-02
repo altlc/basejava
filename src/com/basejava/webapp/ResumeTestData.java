@@ -1,15 +1,16 @@
 package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
+import com.basejava.webapp.util.DateUtil;
 
-import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        System.out.println(generateResume("12131423423423","Григорий Кислин"));
+        System.out.println(generateResume("12131423423423", "Григорий Кислин"));
     }
 
     public static Resume generateResume(String uuid, String fullName) {
@@ -53,19 +54,19 @@ public class ResumeTestData {
 
         List<Organisation> workList = new ArrayList<>();
 
-        Organisation organisation = new Organisation("Alcatel", "http://www.alcatel.ru/");
-        organisation.addStage(LocalDate.of(1997, 9, 1),
-                LocalDate.of(2005, 1, 1),
-                "Инженер по аппаратному и программному тестированию",
-                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)");
+        Organisation organisation = new Organisation("Alcatel", "http://www.alcatel.ru/",
+                new Organisation.Stage(DateUtil.of(1997, Month.SEPTEMBER),
+                        DateUtil.of(2005, Month.JANUARY),
+                        "Инженер по аппаратному и программному тестированию",
+                        "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)"));
 
         workList.add(organisation);
 
-        organisation = new Organisation("Siemens AG", "https://www.siemens.com/ru/ru/home.html");
-        organisation.addStage(LocalDate.of(2005, 1, 1),
-                LocalDate.of(2007, 2, 1),
-                "Разработчик ПО",
-                "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)");
+        organisation = new Organisation("Siemens AG", "https://www.siemens.com/ru/ru/home.html",
+                new Organisation.Stage(DateUtil.of(2005, Month.JANUARY),
+                        DateUtil.of(2007, Month.FEBRUARY),
+                        "Разработчик ПО",
+                        "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)"));
 
         workList.add(organisation);
 
@@ -74,27 +75,27 @@ public class ResumeTestData {
         List<Organisation> educationList = new ArrayList<>();
 
         organisation = new Organisation("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                "http://www.ifmo.ru/");
+                "http://www.ifmo.ru/",
 
-        organisation.addStage(LocalDate.of(1993, 9, 1),
-                LocalDate.of(1996, 7, 1),
-                "",
-                "Аспирантура (программист С, С++)");
+                new Organisation.Stage(DateUtil.of(1993, Month.SEPTEMBER),
+                        DateUtil.of(1996, Month.JULY),
+                        "",
+                        "Аспирантура (программист С, С++)"),
 
-        organisation.addStage(LocalDate.of(1987, 9, 1),
-                LocalDate.of(1993, 7, 1),
-                "",
-                "Инженер (программист Fortran, C)");
+                new Organisation.Stage(DateUtil.of(1987, Month.SEPTEMBER),
+                        DateUtil.of(1993, Month.JULY),
+                        "",
+                        "Инженер (программист Fortran, C)"));
 
         educationList.add(organisation);
 
         organisation = new Organisation("Заочная физико-техническая школа при МФТИ",
-                "http://www.school.mipt.ru/");
+                "http://www.school.mipt.ru/",
 
-        organisation.addStage(LocalDate.of(1984, 9, 1),
-                LocalDate.of(1987, 6, 1),
-                "",
-                "Закончил с отличием");
+                new Organisation.Stage(DateUtil.of(1984, Month.SEPTEMBER),
+                        DateUtil.of(1987, Month.JUNE),
+                        "",
+                        "Закончил с отличием"));
 
         educationList.add(organisation);
 
