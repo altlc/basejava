@@ -1,6 +1,8 @@
 package com.basejava.webapp.model;
 
 import com.basejava.webapp.storage.Link;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -9,10 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organisation implements Serializable {
 
-    private final Link homePage;
+    private Link homePage;
     private List<Stage> stages = new ArrayList<>();
+
+    public Organisation() {
+    }
 
     public Organisation(String name, String url, Stage... stages) {
         this(new Link(name, url), Arrays.asList(stages));
@@ -25,6 +31,14 @@ public class Organisation implements Serializable {
 
     public Organisation(String name, String url, List<Stage> stages) {
         this(new Link(name, url), stages);
+    }
+
+    public List<Stage> getStages() {
+        return stages;
+    }
+
+    public Link getHomePage() {
+        return homePage;
     }
 
     public void addStage(LocalDate startDate, LocalDate endDate, String jobTitle, String description) {
@@ -54,6 +68,7 @@ public class Organisation implements Serializable {
         return result.toString();
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Stage implements Serializable {
         private static final long serialVersionUID = 1L;
 

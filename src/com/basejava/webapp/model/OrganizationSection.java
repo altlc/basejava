@@ -1,11 +1,18 @@
 package com.basejava.webapp.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 import java.util.List;
 import java.util.Objects;
 
-public class OrganizationSection extends AbstractSection {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class OrganizationSection extends Section {
     private static final long serialVersionUID = 1L;
-    private final List<Organisation> organisationList;
+    private List<Organisation> organisationList;
+
+    public OrganizationSection() {
+    }
 
     public OrganizationSection(List<Organisation> organisations) {
         this.organisationList = organisations;

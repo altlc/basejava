@@ -1,22 +1,27 @@
 package com.basejava.webapp.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Initial resume class
- */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
-    // Unique identifier
-    private final String uuid;
-    private final String fullName;
-
     private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+    // Unique identifier
+    private String uuid;
+    private String fullName;
+
+    public Resume() {
+    }
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -25,6 +30,14 @@ public class Resume implements Comparable<Resume>, Serializable {
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
         this.fullName = fullName;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
     }
 
     public String getUuid() {
@@ -43,11 +56,11 @@ public class Resume implements Comparable<Resume>, Serializable {
         return contacts.get(type);
     }
 
-    public void addSection(SectionType sectionType, AbstractSection section) {
+    public void addSection(SectionType sectionType, Section section) {
         sections.put(sectionType, section);
     }
 
-    public AbstractSection getSection(SectionType type) {
+    public Section getSection(SectionType type) {
         return sections.get(type);
     }
 
