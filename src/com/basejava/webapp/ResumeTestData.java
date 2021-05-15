@@ -54,7 +54,7 @@ public class ResumeTestData {
 
         List<Organisation> workList = new ArrayList<>();
 
-        Organisation organisation = new Organisation("Alcatel", "https://www.alcatel.ru/",
+        Organisation organisation = new Organisation("Alcatel", null,
                 new Organisation.Stage(DateUtil.of(1997, Month.SEPTEMBER),
                         DateUtil.of(2005, Month.JANUARY),
                         "Инженер по аппаратному и программному тестированию",
@@ -79,13 +79,13 @@ public class ResumeTestData {
 
                 new Organisation.Stage(DateUtil.of(1993, Month.SEPTEMBER),
                         DateUtil.of(1996, Month.JULY),
-                        "",
-                        "Аспирантура (программист С, С++)"),
+                        "Аспирантура (программист С, С++)",
+                        ""),
 
                 new Organisation.Stage(DateUtil.of(1987, Month.SEPTEMBER),
                         DateUtil.of(1993, Month.JULY),
-                        "",
-                        "Инженер (программист Fortran, C)"));
+                        "Инженер (программист Fortran, C)",
+                        ""));
 
         educationList.add(organisation);
 

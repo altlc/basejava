@@ -6,6 +6,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class DataSerializer implements Serializer {
 
@@ -16,14 +17,14 @@ public class DataSerializer implements Serializer {
             dos.writeUTF(r.getFullName());
 
             writeList(dos, r.getContacts().entrySet(), listItem -> {
-                dos.writeUTF(listItem.getKey().toString());
+                dos.writeUTF(listItem.getKey().name());
                 dos.writeUTF(listItem.getValue());
             });
 
             writeList(dos, r.getSections().entrySet(), listItem -> {
                 SectionType st = listItem.getKey();
                 Section section = listItem.getValue();
-                dos.writeUTF(st.toString());
+                dos.writeUTF(st.name());
 
                 switch (st) {
                     case PERSONAL:
@@ -38,12 +39,12 @@ public class DataSerializer implements Serializer {
                     case EXPERIENCE:
                         writeList(dos, ((OrganizationSection) section).getOrganisationsList(), organisation -> {
                             dos.writeUTF(organisation.getHomePage().getName());
-                            dos.writeUTF(organisation.getHomePage().getUrl());
+                            dos.writeUTF(Objects.requireNonNullElse(organisation.getHomePage().getUrl(), ""));
                             writeList(dos, organisation.getStages(), stage -> {
                                 writeDate(dos, stage.getStartDate());
                                 writeDate(dos, stage.getEndDate());
                                 dos.writeUTF(stage.getJobTitle());
-                                dos.writeUTF(stage.getDescription());
+                                dos.writeUTF(Objects.requireNonNullElse(stage.getDescription(), ""));
                             });
                         });
                         break;
@@ -58,9 +59,7 @@ public class DataSerializer implements Serializer {
         try (DataInputStream dis = new DataInputStream(is)) {
             Resume resume = new Resume(dis.readUTF(), dis.readUTF());
 
-            mapList(dis, () -> {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            });
+            mapList(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
             mapList(dis, () -> {
                 SectionType st = SectionType.valueOf(dis.readUTF());
@@ -78,8 +77,8 @@ public class DataSerializer implements Serializer {
                     case EXPERIENCE:
                         resume.addSection(st,
                                 new OrganizationSection(readList(dis, () ->
-                                        new Organisation(dis.readUTF(), dis.readUTF(), readList(dis, () ->
-                                                new Organisation.Stage(readDate(dis), readDate(dis), dis.readUTF(), dis.readUTF()))
+                                        new Organisation(dis.readUTF(), emptyToNull(dis.readUTF()), readList(dis, () ->
+                                                new Organisation.Stage(readDate(dis), readDate(dis), dis.readUTF(), emptyToNull(dis.readUTF())))
                                         ))));
                         break;
 
@@ -87,6 +86,10 @@ public class DataSerializer implements Serializer {
             });
             return resume;
         }
+    }
+
+    private String emptyToNull(String text) {
+        return text.equals("") ? null : text;
     }
 
     private void writeDate(DataOutputStream dos, LocalDate date) throws IOException {

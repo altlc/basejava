@@ -92,7 +92,7 @@ public class Organisation implements Serializable {
             this.startDate = startDate;
             this.endDate = endDate;
             this.jobTitle = jobTitle;
-            this.description = description;
+            this.description = Objects.isNull(description) || description.equals("") ? null : description;
         }
 
         public LocalDate getStartDate() {
@@ -121,7 +121,7 @@ public class Organisation implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Stage stage = (Stage) o;
-            return startDate.equals(stage.startDate) && endDate.equals(stage.endDate) && jobTitle.equals(stage.jobTitle) && description.equals(stage.description);
+            return startDate.equals(stage.startDate) && endDate.equals(stage.endDate) && jobTitle.equals(stage.jobTitle) && Objects.equals(description, stage.description);
         }
 
         @Override
