@@ -1,8 +1,10 @@
 package com.basejava.webapp.model;
 
 import com.basejava.webapp.storage.Link;
+import com.basejava.webapp.util.LocalDateAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -72,10 +74,16 @@ public class Organisation implements Serializable {
     public static class Stage implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private final LocalDate startDate;
-        private final LocalDate endDate;
-        private final String jobTitle;
-        private final String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endDate;
+        private String jobTitle;
+        private String description;
+
+        public Stage() {
+
+        }
 
         public Stage(LocalDate startDate, LocalDate endDate, String jobTitle, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");

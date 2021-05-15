@@ -21,7 +21,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
         resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
         resume.addContact(ContactType.STATCKOVERFLOW, "https://stackoverflow.com/users/548473");
-        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
+        resume.addContact(ContactType.HOME_PAGE, "https://gkislin.ru/");
 
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
@@ -54,7 +54,7 @@ public class ResumeTestData {
 
         List<Organisation> workList = new ArrayList<>();
 
-        Organisation organisation = new Organisation("Alcatel", "http://www.alcatel.ru/",
+        Organisation organisation = new Organisation("Alcatel", "https://www.alcatel.ru/",
                 new Organisation.Stage(DateUtil.of(1997, Month.SEPTEMBER),
                         DateUtil.of(2005, Month.JANUARY),
                         "Инженер по аппаратному и программному тестированию",
@@ -75,7 +75,7 @@ public class ResumeTestData {
         List<Organisation> educationList = new ArrayList<>();
 
         organisation = new Organisation("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                "http://www.ifmo.ru/",
+                "https://www.ifmo.ru/",
 
                 new Organisation.Stage(DateUtil.of(1993, Month.SEPTEMBER),
                         DateUtil.of(1996, Month.JULY),
@@ -90,7 +90,7 @@ public class ResumeTestData {
         educationList.add(organisation);
 
         organisation = new Organisation("Заочная физико-техническая школа при МФТИ",
-                "http://www.school.mipt.ru/",
+                "https://www.school.mipt.ru/",
 
                 new Organisation.Stage(DateUtil.of(1984, Month.SEPTEMBER),
                         DateUtil.of(1987, Month.JUNE),
