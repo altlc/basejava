@@ -1,4 +1,4 @@
-package com.basejava;
+package com.basejava.webapp;
 
 import java.util.Objects;
 

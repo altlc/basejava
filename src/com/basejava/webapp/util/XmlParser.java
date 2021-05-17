@@ -1,9 +1,9 @@
 package com.basejava.webapp.util;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -11,7 +11,7 @@ public class XmlParser {
     private final Marshaller marshaller;
     private final Unmarshaller unmarshaller;
 
-    public XmlParser(Class... classesToBeBound) {
+    public XmlParser(Class<?>... classesToBeBound) {
         try {
             JAXBContext ctx = JAXBContext.newInstance(classesToBeBound);
 
@@ -26,9 +26,14 @@ public class XmlParser {
         }
     }
 
-    public <T> T unmarshall(Reader reader) {
+    public <T> T unmarshall(Reader reader, Class<T> clazz) {
         try {
-            return (T) unmarshaller.unmarshal(reader);
+            Object obj  = unmarshaller.unmarshal(reader);
+            if (clazz.isInstance(obj)){
+                return clazz.cast(obj);
+            }else {
+                throw new IllegalStateException();
+            }
         } catch (JAXBException e) {
             throw new IllegalStateException(e);
         }

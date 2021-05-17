@@ -2,10 +2,10 @@ package com.basejava.webapp.model;
 
 import com.basejava.webapp.storage.Link;
 import com.basejava.webapp.util.LocalDateAdapter;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
