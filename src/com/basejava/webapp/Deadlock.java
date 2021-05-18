@@ -12,16 +12,17 @@ public class Deadlock {
 
     private static void lock(Object lock1, Object lock2) {
         Thread thread = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " trying to acquire first lock");
             synchronized (lock1) {
-                System.out.println("lock1");
+                System.out.println(Thread.currentThread().getName() + " acquire first lock");
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                System.out.println(Thread.currentThread().getName() + " trying to acquire second lock");
                 synchronized (lock2) {
-                    System.out.println("lock2");
+                    System.out.println(Thread.currentThread().getName() + " acquire second lock");
                 }
             }
         });
