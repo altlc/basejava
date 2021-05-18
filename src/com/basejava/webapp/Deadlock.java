@@ -14,7 +14,6 @@ public class Deadlock {
         Thread thread = new Thread(() -> {
             System.out.println(Thread.currentThread().getName() + " trying to acquire " + lock1);
             synchronized (lock1) {
-                //lock1.getClass().getName();
                 System.out.println(Thread.currentThread().getName() + " acquire " + lock1);
                 try {
                     Thread.sleep(50);
