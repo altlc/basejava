@@ -11,7 +11,7 @@ public class Deadlock {
     }
 
     private static void lock(Object lock1, Object lock2) {
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             System.out.println(Thread.currentThread().getName() + " trying to acquire " + lock1);
             synchronized (lock1) {
                 System.out.println(Thread.currentThread().getName() + " acquire " + lock1);
@@ -25,8 +25,7 @@ public class Deadlock {
                     System.out.println(Thread.currentThread().getName() + " acquire " + lock2);
                 }
             }
-        });
-        thread.start();
+        }).start();
     }
 
 }
