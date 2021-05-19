@@ -21,13 +21,13 @@ public class MainStream {
     }
 
     public static int minValue(int[] values) {
-        final AtomicInteger iterator = new AtomicInteger(1);
+        final AtomicInteger offset = new AtomicInteger(1);
         return Arrays.stream(values)
                 .distinct()
                 .boxed()
                 .sorted(Collections.reverseOrder())
                 .mapToInt(Integer::intValue)
-                .map(num -> num * iterator.getAndUpdate(iter -> iter *= 10)).sum();
+                .map(num -> num * offset.getAndUpdate(n -> n *= 10)).sum();
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
