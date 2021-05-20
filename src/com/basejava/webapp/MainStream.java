@@ -1,9 +1,7 @@
 package com.basejava.webapp;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MainStream {
@@ -21,13 +19,10 @@ public class MainStream {
     }
 
     public static int minValue(int[] values) {
-        final AtomicInteger offset = new AtomicInteger(1);
         return Arrays.stream(values)
                 .distinct()
-                .boxed()
-                .sorted(Collections.reverseOrder())
-                .mapToInt(Integer::intValue)
-                .map(num -> num * offset.getAndUpdate(n -> n *= 10)).sum();
+                .sorted()
+                .reduce(0, (left, right) -> left * 10 + right);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
