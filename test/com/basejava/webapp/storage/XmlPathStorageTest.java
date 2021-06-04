@@ -5,6 +5,6 @@ import com.basejava.webapp.storage.serializer.XmlSerializer;
 public class XmlPathStorageTest extends AbstractStorageTest {
 
     public XmlPathStorageTest() {
-        super(new PathStorage(STORAGE_DIR,new XmlSerializer()));
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(),new XmlSerializer()));
     }
 }

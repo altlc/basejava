@@ -5,6 +5,6 @@ import com.basejava.webapp.storage.serializer.ObjectSerializer;
 public class ObjectStreamPathStorageTest extends AbstractStorageTest {
 
     public ObjectStreamPathStorageTest() {
-        super(new PathStorage(STORAGE_DIR,new ObjectSerializer()));
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(),new ObjectSerializer()));
     }
 }

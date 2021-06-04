@@ -17,10 +17,6 @@ public class SqlStorage implements Storage {
         sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
-    private String trimText(String text) {
-        return ("X" + text).trim().substring(1);
-    }
-
     @Override
     public void clear() {
         sqlHelper.exec(
@@ -34,10 +30,11 @@ public class SqlStorage implements Storage {
         sqlHelper.exec(
                 "UPDATE resume SET full_name = ? WHERE uuid = ?",
                 prepareStatement -> {
+                    String uuid = r.getUuid();
                     prepareStatement.setString(1, r.getFullName());
-                    prepareStatement.setString(2, r.getUuid());
+                    prepareStatement.setString(2, uuid);
                     if (prepareStatement.executeUpdate() == 0) {
-                        throw new NotExistStorageException(r.getUuid());
+                        throw new NotExistStorageException(uuid);
                     }
                     return null;
                 }
@@ -96,7 +93,7 @@ public class SqlStorage implements Storage {
                     while (queryResult.next()) {
                         resumes.add(
                                 new Resume(
-                                        trimText(queryResult.getString("uuid")),
+                                        queryResult.getString("uuid"),
                                         queryResult.getString("full_name")
                                 )
                         );
