@@ -1,12 +1,6 @@
 package com.basejava.webapp;
 
-import com.basejava.webapp.model.*;
-import com.basejava.webapp.util.DateUtil;
-
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.basejava.webapp.model.Resume;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -15,6 +9,7 @@ public class ResumeTestData {
 
     public static Resume generateResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+       /*
         resume.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -100,6 +95,7 @@ public class ResumeTestData {
         educationList.add(organisation);
 
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        */
         return resume;
     }
 }
