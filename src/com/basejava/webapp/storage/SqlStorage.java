@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,36 @@ public class SqlStorage implements Storage {
         sqlHelper.exec(
                 "DELETE FROM resume",
                 PreparedStatement::execute
+        );
+    }
+
+    @Override
+    public void delete(String uuid) {
+        sqlHelper.exec(
+                "DELETE FROM resume WHERE uuid=?",
+                prepareStatement -> {
+                    prepareStatement.setString(1, uuid);
+                    if (prepareStatement.executeUpdate() == 0) {
+                        throw new NotExistStorageException(uuid);
+                    }
+                    return null;
+                }
+        );
+    }
+
+    @Override
+    public void save(Resume resume) {
+        sqlHelper.transactionalExec(connection -> {
+                    try (
+                            PreparedStatement preparedStatement = connection.prepareStatement(
+                                    "INSERT INTO resume (uuid,full_name) values (?,?)")) {
+                        preparedStatement.setString(1, resume.getUuid());
+                        preparedStatement.setString(2, resume.getFullName());
+                        preparedStatement.execute();
+                    }
+                    insertContacts(connection, resume);
+                    return null;
+                }
         );
     }
 
@@ -49,78 +80,13 @@ public class SqlStorage implements Storage {
     }
 
     @Override
-    public void save(Resume resume) {
-        sqlHelper.transactionalExec(connection -> {
-                    try (
-                            PreparedStatement preparedStatement = connection.prepareStatement(
-                                    "INSERT INTO resume (uuid,full_name) values (?,?)")) {
-                        preparedStatement.setString(1, resume.getUuid());
-                        preparedStatement.setString(2, resume.getFullName());
-                        preparedStatement.execute();
-                    }
-                    insertContacts(connection, resume);
-                    return null;
-                }
-        );
-    }
-
-    @Override
     public Resume get(String uuid) {
-        return sqlHelper.exec(
-                "SELECT * FROM resume r" +
-                        " left join contact c ON r.uuid = c.resume_uuid" +
-                        " WHERE r.uuid =?",
-                prepareStatement -> {
-                    prepareStatement.setString(1, uuid);
-                    ResultSet queryResult = prepareStatement.executeQuery();
-                    if (!queryResult.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
-
-                    Resume resume = new Resume(uuid, queryResult.getString("full_name"));
-
-                    do {
-                        String type = queryResult.getString("type");
-                        String value = queryResult.getString("value");
-                        if (type != null && value != null) {
-                            resume.addContact(ContactType.valueOf(type), value);
-                        }
-                    } while (queryResult.next());
-
-                    return resume;
-                }
-        );
-    }
-
-    @Override
-    public void delete(String uuid) {
-        sqlHelper.exec(
-                "DELETE FROM resume WHERE uuid=?",
-                prepareStatement -> {
-                    prepareStatement.setString(1, uuid);
-                    if (prepareStatement.executeUpdate() == 0) {
-                        throw new NotExistStorageException(uuid);
-                    }
-                    return null;
-                }
-        );
+        return getResumes(uuid).get(uuid);
     }
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.exec(
-                "SELECT uuid FROM resume r ORDER BY full_name,uuid",
-                prepareStatement -> {
-                    ResultSet queryResult = prepareStatement.executeQuery();
-                    List<Resume> resumes = new ArrayList<>();
-                    while (queryResult.next()) {
-                        resumes.add(
-                                get(queryResult.getString("uuid"))
-                        );
-                    }
-                    return resumes;
-                }
-        );
+        return new ArrayList<>(getResumes(null).values());
     }
 
     @Override
@@ -157,4 +123,37 @@ public class SqlStorage implements Storage {
         }
     }
 
+    private Map<String, Resume> getResumes(String uuid) {
+        return sqlHelper.exec(
+                "select * from resume" +
+                        " left join contact on resume.uuid = contact.resume_uuid" +
+                        (uuid != null ? " where uuid= ?" : ""),
+                prepareStatement -> {
+                    if (uuid != null) prepareStatement.setString(1, uuid);
+                    ResultSet queryResult = prepareStatement.executeQuery();
+
+                    Map<String, Resume> map = new LinkedHashMap<>();
+
+                    if (!queryResult.next()) {
+                        if (uuid != null) {
+                            throw new NotExistStorageException(uuid);
+                        }
+                    } else {
+                        do {
+                            String currentUuid = queryResult.getString("uuid");
+                            Resume resume = map.get(currentUuid);
+                            if (resume == null) {
+                                resume = new Resume(currentUuid, queryResult.getString("full_name"));
+                                map.put(currentUuid, resume);
+                            }
+                            String type = queryResult.getString("type");
+                            if (type != null) {
+                                resume.addContact(ContactType.valueOf(type), queryResult.getString("value"));
+                            }
+
+                        } while (queryResult.next());
+                    }
+                    return map;
+                });
+    }
 }
