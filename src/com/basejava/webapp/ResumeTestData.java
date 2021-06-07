@@ -1,5 +1,6 @@
 package com.basejava.webapp;
 
+import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.Resume;
 
 public class ResumeTestData {
@@ -9,7 +10,7 @@ public class ResumeTestData {
 
     public static Resume generateResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-       /*
+
         resume.addContact(ContactType.MOBILE_PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -17,7 +18,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
         resume.addContact(ContactType.STATCKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.addContact(ContactType.HOME_PAGE, "https://gkislin.ru/");
-
+       /*
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
