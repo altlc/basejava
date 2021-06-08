@@ -127,7 +127,8 @@ public class SqlStorage implements Storage {
         return sqlHelper.exec(
                 "select * from resume" +
                         " left join contact on resume.uuid = contact.resume_uuid" +
-                        (uuid != null ? " where uuid= ?" : ""),
+                        (uuid != null ? " where uuid= ?" : "") +
+                        " order by full_name, uuid",
                 prepareStatement -> {
                     if (uuid != null) prepareStatement.setString(1, uuid);
                     ResultSet queryResult = prepareStatement.executeQuery();
@@ -142,6 +143,7 @@ public class SqlStorage implements Storage {
                         do {
                             String currentUuid = queryResult.getString("uuid");
                             Resume resume = map.get(currentUuid);
+
                             if (resume == null) {
                                 resume = new Resume(currentUuid, queryResult.getString("full_name"));
                                 map.put(currentUuid, resume);
@@ -150,7 +152,6 @@ public class SqlStorage implements Storage {
                             if (type != null) {
                                 resume.addContact(ContactType.valueOf(type), queryResult.getString("value"));
                             }
-
                         } while (queryResult.next());
                     }
                     return map;
