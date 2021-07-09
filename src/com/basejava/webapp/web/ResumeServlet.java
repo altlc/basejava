@@ -4,6 +4,7 @@ import com.basejava.webapp.Config;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.Storage;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +14,11 @@ import java.io.PrintWriter;
 
 public class ResumeServlet extends HttpServlet {
 
-    private final Storage storage;
+    private Storage storage;
 
-    public ResumeServlet() {
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         storage = Config.get().getStorageDb();
     }
 
@@ -29,7 +32,7 @@ public class ResumeServlet extends HttpServlet {
 
         result.append("<table border=0 cellspacing=0 style=\"border: 1px solid black\">\n<thead>\n<tr>\n<th>UUID</th><th>Full name</th>\n<tr>\n<thead>\n<tbody>\n");
         int row = 0;
-        for (Resume resume: storage.getAllSorted()) {
+        for (Resume resume : storage.getAllSorted()) {
             String rowStyle = (row % 2 == 0) ? "#dedfe0" : "white";
             row++;
             result.append("<tr style='background-color: ").append(rowStyle).append("'>\n<td >").
