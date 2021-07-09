@@ -6,7 +6,6 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public class DataSerializer implements Serializer {
 
@@ -39,12 +38,12 @@ public class DataSerializer implements Serializer {
                     case EXPERIENCE:
                         writeList(dos, ((OrganizationSection) section).getOrganisationsList(), organisation -> {
                             dos.writeUTF(organisation.getHomePage().getName());
-                            dos.writeUTF(Objects.requireNonNullElse(organisation.getHomePage().getUrl(), ""));
+                            dos.writeUTF(organisation.getHomePage().getUrl());
                             writeList(dos, organisation.getStages(), stage -> {
                                 writeDate(dos, stage.getStartDate());
                                 writeDate(dos, stage.getEndDate());
                                 dos.writeUTF(stage.getJobTitle());
-                                dos.writeUTF(Objects.requireNonNullElse(stage.getDescription(), ""));
+                                dos.writeUTF(stage.getDescription());
                             });
                         });
                         break;

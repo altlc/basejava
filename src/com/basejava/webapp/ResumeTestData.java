@@ -1,7 +1,8 @@
 package com.basejava.webapp;
 
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
+
+import java.util.Arrays;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -18,7 +19,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
         resume.addContact(ContactType.STATCKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.addContact(ContactType.HOME_PAGE, "https://gkislin.ru/");
-       /*
+
         resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
 
@@ -47,7 +48,7 @@ public class ResumeTestData {
                 "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования",
                 "Родной русский, английский \"upper intermediate\""
         )));
-
+       /*
         List<Organisation> workList = new ArrayList<>();
 
         Organisation organisation = new Organisation("Alcatel", null,
