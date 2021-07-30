@@ -11,25 +11,15 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-import static com.basejava.webapp.ResumeTestData.generateResume;
+import static com.basejava.webapp.util.TestData.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
-    private static final String UUID_1 = UUID.randomUUID().toString();
-    private static final String UUID_2 = UUID.randomUUID().toString();
-    private static final String UUID_3 = UUID.randomUUID().toString();
-    private static final String UUID_4 = UUID.randomUUID().toString();
-
     private static final String DUMMY_UUID = "dummy";
-    private static final Resume RESUME_1 = generateResume(UUID_1, "TEST1");
-    private static final Resume RESUME_2 = generateResume(UUID_2, "TEST2");
-    private static final Resume RESUME_3 = generateResume(UUID_3, "TEST3");
-    private static final Resume RESUME_4 = generateResume(UUID_4, "TEST4");
-    private static final Resume DUMMY_RESUME = generateResume(DUMMY_UUID, "DUMMY");
+
     protected final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
@@ -39,9 +29,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(RESUME_1);
-        storage.save(RESUME_2);
-        storage.save(RESUME_3);
+        storage.save(R1);
+        storage.save(R2);
+        storage.save(R3);
     }
 
     @Test
@@ -61,9 +51,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        assertGet(RESUME_1);
-        assertGet(RESUME_2);
-        assertGet(RESUME_3);
+        assertGet(R1);
+        assertGet(R2);
+        assertGet(R3);
     }
 
     private void assertGet(Resume r) {
@@ -77,14 +67,14 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        storage.save(RESUME_4);
+        storage.save(R4);
         assertSize(4);
-        assertGet(RESUME_4);
+        assertGet(R4);
     }
 
     @Test(expected = ExistStorageException.class)
     public void saveExists() {
-        storage.save(RESUME_2);
+        storage.save(R2);
     }
 
     @Test
@@ -96,7 +86,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNonExists() {
-        storage.update(DUMMY_RESUME);
+        storage.update(R4);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -108,14 +98,14 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNonExists() {
-        storage.delete(DUMMY_UUID);
+        storage.delete(UUID_4);
     }
 
     @Test
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-        List<Resume> testResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        List<Resume> testResumes = Arrays.asList(R1, R2, R3);
         Collections.sort(testResumes);
         assertEquals(testResumes,list);
     }

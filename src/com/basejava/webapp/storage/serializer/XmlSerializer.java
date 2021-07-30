@@ -12,8 +12,8 @@ public class XmlSerializer implements Serializer {
 
     public XmlSerializer() {
         xmlParser = new XmlParser(
-                Resume.class, Organisation.class, Link.class,
-                OrganizationSection.class, TextSection.class, ListSection.class, Organisation.Stage.class);
+                Resume.class, Organization.class, Link.class,
+                OrganizationSection.class, TextSection.class, ListSection.class, Organization.Stage.class);
     }
 
     @Override

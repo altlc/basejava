@@ -1,7 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class ResumeServlet extends HttpServlet {
 
@@ -24,31 +24,82 @@ public class ResumeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        StringBuilder result = new StringBuilder();
+        String uuid = request.getParameter("uuid");
+        String action = request.getParameter("action");
 
-        result.append("<table border=0 cellspacing=0 style=\"border: 1px solid black\">\n<thead>\n<tr>\n<th>UUID</th><th>Full name</th>\n<tr>\n<thead>\n<tbody>\n");
-        int row = 0;
-        for (Resume resume : storage.getAllSorted()) {
-            String rowStyle = (row % 2 == 0) ? "#dedfe0" : "white";
-            row++;
-            result.append("<tr style='background-color: ").append(rowStyle).append("'>\n<td >").
-                    append(resume.getUuid()).
-                    append("</td><td>").
-                    append(resume.getFullName()).
-                    append("</td>\n<tr>\n");
+        action = action == null ? "list" : action;
+
+        String jspFile;
+        switch (action) {
+            case "create":
+                Resume r = new Resume("Новое Резюме");
+                uuid = r.getUuid();
+                storage.save(r);
+                response.sendRedirect("resume?action=edit&uuid=" + uuid);
+                return;
+            case "delete":
+                storage.delete(uuid);
+                uuid = null;
+            case "list":
+                request.setAttribute("resumes", storage.getAllSorted());
+                jspFile = "/WEB-INF/jsp/list.jsp";
+                break;
+            case "view":
+                jspFile = "/WEB-INF/jsp/view.jsp";
+                break;
+            case "edit":
+                jspFile = "/WEB-INF/jsp/edit.jsp";
+                break;
+            default:
+                throw new IllegalArgumentException("Action " + action + " is illegal");
         }
-
-        result.append("</tbody>\n</table>\n");
-
-        out.write(result.toString());
+        if (uuid != null) {
+            Resume r = storage.get(uuid);
+            request.setAttribute("resume", r);
+        }
+        request.getRequestDispatcher(jspFile).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String uuid = request.getParameter("uuid");
+        String fullName = request.getParameter("fullName");
+        Resume r = storage.get(uuid);
+        r.setFullName(fullName);
+        for (ContactType type : ContactType.values()) {
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                r.addContact(type, value);
+            } else {
+                r.getContacts().remove(type);
+            }
+        }
 
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name());
+            String[] values = request.getParameterValues(type.name());
+
+            if (value == null || value.trim().length() == 0) {
+                r.getSections().remove(type);
+            } else {
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        r.addSection(type, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        r.addSection(type, new ListSection(Arrays.stream(value.split("\\R", -1)).filter(e -> e.trim().length() > 0).toArray(String[]::new)));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        break;
+                }
+            }
+        }
+
+        storage.update(r);
+        response.sendRedirect("resume?action=edit&uuid=" + uuid);
     }
 }

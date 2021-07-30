@@ -8,30 +8,34 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.basejava.webapp.util.DateUtil.NOW;
+import static com.basejava.webapp.util.DateUtil.of;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Organisation implements Serializable {
+public class Organization implements Serializable {
 
     private Link homePage;
     private List<Stage> stages = new ArrayList<>();
 
-    public Organisation() {
+    public Organization() {
     }
 
-    public Organisation(String name, String url, Stage... stages) {
+    public Organization(String name, String url, Stage... stages) {
         this(new Link(name, url), Arrays.asList(stages));
     }
 
-    public Organisation(Link homePage, List<Stage> stages) {
+    public Organization(Link homePage, List<Stage> stages) {
         this.homePage = homePage;
         this.stages = stages;
     }
 
-    public Organisation(String name, String url, List<Stage> stages) {
+    public Organization(String name, String url, List<Stage> stages) {
         this(new Link(name, url), stages);
     }
 
@@ -56,7 +60,7 @@ public class Organisation implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Organisation that = (Organisation) o;
+        Organization that = (Organization) o;
         return homePage.equals(that.homePage) && stages.equals(that.stages);
     }
 
@@ -85,6 +89,14 @@ public class Organisation implements Serializable {
 
         }
 
+        public Stage(int startYear, Month startMonth, String title, String description) {
+            this(of(startYear, startMonth), NOW, title, description);
+        }
+
+        public Stage(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+            this(of(startYear, startMonth), of(endYear, endMonth), title, description);
+        }
+
         public Stage(LocalDate startDate, LocalDate endDate, String jobTitle, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");
             Objects.requireNonNull(endDate, "endDate must not be null");
@@ -92,7 +104,7 @@ public class Organisation implements Serializable {
             this.startDate = startDate;
             this.endDate = endDate;
             this.jobTitle = jobTitle;
-            this.description = Objects.isNull(description) || description.equals("") ? null : description;
+            this.description = Objects.isNull(description) ? "" : description;
         }
 
         public LocalDate getStartDate() {

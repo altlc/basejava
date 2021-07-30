@@ -2,27 +2,31 @@ package com.basejava.webapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationSection extends Section {
     private static final long serialVersionUID = 1L;
-    private List<Organisation> organisationList;
+    private List<Organization> organisationList;
 
     public OrganizationSection() {
     }
 
-    public OrganizationSection(List<Organisation> organisations) {
+    public OrganizationSection(List<Organization> organisations) {
         this.organisationList = organisations;
     }
 
-    public void addOrganisation(Organisation organisation) {
+    public OrganizationSection(Organization... organisations) {
+        this(Arrays.asList(organisations));
+    }
+
+    public void addOrganization(Organization organisation) {
         organisationList.add(organisation);
     }
 
-    public List<Organisation> getOrganisationsList() {
+    public List<Organization> getOrganizationsList() {
         return organisationList;
     }
 
@@ -42,7 +46,7 @@ public class OrganizationSection extends Section {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (Organisation organisation : organisationList) {
+        for (Organization organisation : organisationList) {
             result.append(organisation.toString()).append("\n");
         }
         return result.toString();

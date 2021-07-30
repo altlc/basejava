@@ -36,7 +36,7 @@ public class DataSerializer implements Serializer {
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        writeList(dos, ((OrganizationSection) section).getOrganisationsList(), organisation -> {
+                        writeList(dos, ((OrganizationSection) section).getOrganizationsList(), organisation -> {
                             dos.writeUTF(organisation.getHomePage().getName());
                             dos.writeUTF(organisation.getHomePage().getUrl());
                             writeList(dos, organisation.getStages(), stage -> {
@@ -76,8 +76,8 @@ public class DataSerializer implements Serializer {
                     case EXPERIENCE:
                         resume.addSection(st,
                                 new OrganizationSection(readList(dis, () ->
-                                        new Organisation(dis.readUTF(), emptyToNull(dis.readUTF()), readList(dis, () ->
-                                                new Organisation.Stage(readDate(dis), readDate(dis), dis.readUTF(), emptyToNull(dis.readUTF())))
+                                        new Organization(dis.readUTF(), emptyToNull(dis.readUTF()), readList(dis, () ->
+                                                new Organization.Stage(readDate(dis), readDate(dis), dis.readUTF(), emptyToNull(dis.readUTF())))
                                         ))));
                         break;
 

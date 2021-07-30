@@ -1,8 +1,12 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.model.*;
+import com.basejava.webapp.model.ContactType;
+import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.Section;
+import com.basejava.webapp.model.SectionType;
 import com.basejava.webapp.sql.SqlHelper;
+import com.basejava.webapp.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -124,17 +128,8 @@ public class SqlStorage implements Storage {
             for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
                 preparedStatement.setString(1, resume.getUuid());
                 preparedStatement.setString(2, entry.getKey().name());
-
-                switch (entry.getKey()) {
-                    case OBJECTIVE:
-                    case PERSONAL:
-                        preparedStatement.setString(3, ((TextSection)entry.getValue()).getContent());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        preparedStatement.setString(3, String.join("\n", ((ListSection) entry.getValue()).getContentList()));
-                        break;
-                }
+                Section section = entry.getValue();
+                preparedStatement.setString(3, JsonParser.write(section, Section.class));
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -142,18 +137,15 @@ public class SqlStorage implements Storage {
     }
 
     private void deleteContacts(Connection connection, Resume resume) throws SQLException {
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "delete from contact where resume_uuid = ?")) {
-            preparedStatement.setString(1, resume.getUuid());
-            preparedStatement.execute();
-        }
+        deleteAttribute(connection, resume, "delete from contact where resume_uuid = ?");
     }
 
     private void deleteSections(Connection connection, Resume resume) throws SQLException {
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "delete from section where resume_uuid = ?")) {
+        deleteAttribute(connection, resume, "delete from section where resume_uuid = ?");
+    }
+
+    private void deleteAttribute(Connection connection, Resume resume, String sql) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, resume.getUuid());
             preparedStatement.execute();
         }
@@ -204,19 +196,8 @@ public class SqlStorage implements Storage {
                     Resume resume = map.get(resume_uuid);
                     String value = queryResult.getString("value");
                     SectionType type = SectionType.valueOf(queryResult.getString("type"));
-                    Section section = null;
                     if (value != null) {
-                        switch (type) {
-                            case OBJECTIVE:
-                            case PERSONAL:
-                                section = new TextSection(value);
-                                break;
-                            case ACHIEVEMENT:
-                            case QUALIFICATIONS:
-                                section = new ListSection(value.split("\\R"));
-                                break;
-                        }
-                        resume.addSection(type, section);
+                        resume.addSection(type, JsonParser.read(value, Section.class));
                     }
                 }
             }
