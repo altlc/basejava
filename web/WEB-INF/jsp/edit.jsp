@@ -17,15 +17,15 @@
 <section>
     <div class="uk-card uk-card-default uk-card-small uk-width-2-3 uk-align-center"
          style="margin-top: 10px">
+        <form class="uk-form-horizontal" method="post" action="resume" enctype="application/x-www-form-urlencoded">
+            <div class="uk-card-header">
+                <h3 class="uk-card-title uk-float-left">${resume.fullName}</h3>
+                <a class="uk-button uk-button-primary uk-align-right" href="?action=list">Список</a>
+            </div>
 
-        <div class="uk-card-header">
-            <h3 class="uk-card-title uk-float-left">${resume.fullName}</h3>
-            <a class="uk-button uk-button-primary uk-align-right" href="?action=list">Список</a>
-        </div>
+            <div class="uk-card-body">
 
-        <div class="uk-card-body">
 
-            <form class="uk-form-horizontal" method="post" action="resume" enctype="application/x-www-form-urlencoded">
                 <input type="hidden" name="uuid" value="${resume.uuid}">
 
                 <div class="uk-margin">
@@ -91,13 +91,14 @@
                         </c:when>
                     </c:choose>
                 </c:forEach>
+            </div>
 
-                <hr>
+            <div class="uk-card-footer">
                 <button class="uk-button uk-button-danger" type="submit">Сохранить</button>&nbsp;
                 <button class="uk-button uk-button-default" type="reset">Отменить</button>&nbsp;
                 <a class="uk-button uk-button-primary" href="?action=list">Список</a>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </section>
 <jsp:include page="../../fragments/footer.jsp"/>
